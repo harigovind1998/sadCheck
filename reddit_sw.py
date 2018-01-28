@@ -1,6 +1,7 @@
 import praw, json
 
-#script for writing the first 25 posts on /r/suicidewatch to a text file
+#script for writing the first 25 posts on /r/suicidewatch
+#and /r/happy to a text file
 
 def main():
 	r = praw.Reddit('bot1')
@@ -14,13 +15,25 @@ def main():
 
 	data_dictionary = {}
 
-	count = 0;
+	print("/r/suicidewatch")
 
 	for submissions in suicide_watch_subs:
-		data_dictionary[count] = submissions.selftext
-		count += 1
+		data_dictionary[submissions.selftext] = "depressed";
 		#f.write(submissions.selftext)
 		print(submissions.selftext)
+
+	print("\n\n")
+
+	print("/r/happy")
+
+	happy = r.subreddit('happy')
+	happy_subs = happy.hot(limit=25)
+
+	for submissions in happy_subs:
+		data_dictionary[submissions.title] = "not depressed";
+		print(submissions.selftext)
+
+	print("\n\n")
 
 	jsonData = json.dumps(data_dictionary)
 	f.write(jsonData)
